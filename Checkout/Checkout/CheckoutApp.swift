@@ -11,7 +11,7 @@ import SwiftUI
 struct CheckoutApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CheckoutView()
         }
     }
 }
