@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct CheckoutApp: App {
+    
+    private let viewModel = CheckoutViewModel()
+    
+    
     var body: some Scene {
         WindowGroup {
-            CheckoutView()
+            CheckoutView(viewModel: viewModel)
         }
     }
 }

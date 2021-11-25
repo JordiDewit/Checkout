@@ -4,52 +4,61 @@
 import Foundation
 
 
-struct Store<ProductImg> {
+struct Store{
     
-  private(set) var products: [Product]
+    private(set) var products: Array<Product>
+    private(set) var productOnScreen: Product
     
-    init(numberOfProducts: Int, createImg: (Int) -> ProductImg ){
-        products = []
+    //INITIALISER
+    
+    init(numberOfProducts: Int, createImg: (Int) -> String){
         
-        for i in 0..<numberOfProducts{
-            var productImg = createImg(i)
-            products.append(Product(id: i, img: ProductImg, price: generatePrice()))
+        products = []
+        for i in 1..<numberOfProducts+1{
+            let emo: String = createImg(i)
+            let price: Double = round((Double.random(in: 1..<1000)))/100
+            products.append(Product(id: i, img: emo, price: price))
         }
+        productOnScreen = products[0]
+        print(products)
+        print(productOnScreen)
+
     }
     
-    // Generate a price for a product
-    private func generatePrice() -> Double{
-        var min = 1
-        var max = 10
-        return Double.random * (Double(max - min)) + Double(min)
+    //FUNCTIONS
+    
+    
+    mutating func getNextProduct(){
+        let i = products.firstIndex(where: {
+            $0.id == productOnScreen.id
+        })!
+        
+        if i == 0 || i < products.count-1 {
+            productOnScreen = products[i+1]
+        }else{
+            productOnScreen = products[0]
+        }
+        print(productOnScreen)
+    }
+    
+    //STRUCTS
+    struct Product: Identifiable, Equatable{
+        
+        let id: Int
+        let img: String
+        let price: Double
+        
+        //initialising from a product instance
+        init(id: Int, img: String, price: Double){
+            self.id    = id
+            self.img   = img
+            self.price = price
+        }
+        
     }
 }
 
 
 
-class Product : Identifiable{
-    
-    let id: Int
-    let img: String
-    let price: Double
-    
-    //initialising from a product instance
-    init(id: Int, img: String, price: Double){
-        self.id    = id
-        self.img   = img
-        self.price = price
-    }
-    
-}
 
 
-
-class Player{
-    let name: String
-    let score: Int
-    
-    init(name: String){
-        self.name = name
-        score     = 0
-    }
-}

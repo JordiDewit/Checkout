@@ -7,26 +7,62 @@
 import SwiftUI
 
 struct CheckoutView: View {
-    var body: some View {
-        ProductView()
-    }
-}
-
-// This is the view for a product + price
-struct ProductView: View {
+    
+    // viewmodel dependency
+    @ObservedObject var viewModel: CheckoutViewModel
+    
+    
     var body: some View {
         VStack{
-            Text("🥐")
-                .font(.system(size: ViewConstants.fontsize))
-            Text("prijs")
-                .font(.system(size: ViewConstants.fontsize - 30))
+            Text("CHECKOUT")
+                .font(Font.system(size: Constants.fontSize2))
+                .padding()
+            Spacer()
+            ProductView(show: viewModel.productOnScreen)
+            nextProduct
         }
+        .padding()
+        
+    }
+    
+    var nextProduct: some View {
+        Button("Next"){
+            viewModel.getNextProduct()
+        }
+    }
+    
+}
+
+struct ProductView: View{
+    
+    private let product: CheckoutViewModel.Product
+    
+    init(show product: CheckoutViewModel.Product){
+        self.product = product
+    }
+    
+    var body: some View{
+        VStack{
+            Text(product.img)
+                .font(Font.system(size: Constants.fontSize))
+            Text("\(product.price, specifier: "%.2f")")
+                .font(Font.system(size: Constants.fontSize2))
+            
+        }
+        .padding()
+        
     }
 }
 
-struct ViewConstants {
-    static let fontsize: CGFloat = 70
+
+struct Constants{
+    static let fontSize: CGFloat = 100
+    static let fontSize2: CGFloat = 32
 }
+
+
+
+
 
 
 
@@ -56,7 +92,8 @@ struct ViewConstants {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        CheckoutView()
+        let viewModel = CheckoutViewModel()
+        return CheckoutView(viewModel: viewModel)
             .preferredColorScheme(.dark)
     }
 }
