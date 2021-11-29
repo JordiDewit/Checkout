@@ -6,27 +6,28 @@ import Foundation
 
 struct Store{
     
+    private(set) var name: String
     private(set) var products: Array<Product>
     private(set) var productOnScreen: Product
+    private(set) var score: Int
+    private(set) var payed: Double
     
     //INITIALISER
     
-    init(numberOfProducts: Int, createImg: (Int) -> String){
-        
+    init(chosenStore storename: String, numberOfProducts: Int, createImg: (Int) -> String){
+        name = storename
+        score = 0
         products = []
+        payed = 0
         for i in 1..<numberOfProducts+1{
             let emo: String = createImg(i)
             let price: Double = round((Double.random(in: 1..<1000)))/100
             products.append(Product(id: i, img: emo, price: price))
         }
         productOnScreen = products[0]
-        print(products)
-        print(productOnScreen)
-
     }
     
     //FUNCTIONS
-    
     
     mutating func getNextProduct(){
         let i = products.firstIndex(where: {
@@ -36,9 +37,18 @@ struct Store{
         if i == 0 || i < products.count-1 {
             productOnScreen = products[i+1]
         }else{
-            productOnScreen = products[0]
+            print("We are done")
         }
-        print(productOnScreen)
+    }
+    
+    mutating func giveMoney(payed value: Double){
+        payed += value
+    }
+    
+    mutating func pay(payed value: Double, for product: Product){
+        score += 1
+        getNextProduct()
+        payed = 0
     }
     
     //STRUCTS

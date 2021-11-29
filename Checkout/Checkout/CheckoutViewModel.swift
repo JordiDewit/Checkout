@@ -20,17 +20,45 @@ class CheckoutViewModel: ObservableObject
         return model.productOnScreen
     }
     
+    var payed: Double {
+        return model.payed
+    }
     
+    // building the store (game)
     static func buildStore() -> Store {
         
-      return Store(numberOfProducts: 5, createImg: { index in
-            KindsOfProducts.butcher[index]
+        return Store(chosenStore: StoreOptions.veggieFarmer, numberOfProducts: 5, createImg: { index in
+            KindsOfProducts.veggieFarmer[index]
         })
         
     }
     
+    // getter for the storename
+    func getStoreName() -> String{
+        return model.name
+    }
+    
+    // get cash (levels must be still implemented)
+    func getCash() -> Array<Double>{
+        return Money.hardMoney
+    }
+    
+    // getter for the next product
     func getNextProduct(){
         model.getNextProduct()
+    }
+    // getter to collect te money
+    func giveMoney(payed value: Double){
+        model.giveMoney(payed: value)
+    }
+    
+    // function to pay the product
+    func pay(for product: Product){
+        model.pay(payed: payed, for: product)
+    }
+    // getter for score
+    func getScore() -> Int{
+        return model.score
     }
  
     
@@ -42,6 +70,22 @@ class CheckoutViewModel: ObservableObject
         static let fruitShop    = ["🍏","🍎","🍊","🍋","🍉","🍇","🍓","🫐","🍌","🍑"]
         static let toyStore     = ["🚗","🏎","🛴","🚲","🚜","🚎","✈️","🛶","🚁"]
         static let sportStore   = ["⚽️","🏀","🏈","🏓","🪃","🥋","⛸","🛼","🤿","🥅"]
+    }
+    
+    //The money values which depend on the chosen Level
+    struct Money {
+        static let easyMoney: Array<Double>   =  [10,5,2,1]
+        static let mediumMoney: Array<Double> =  [20,10,5,2,1,0.5,0.2,0.1]
+        static let hardMoney: Array<Double>   =  [50,20,10,5,2,1,0.5,0.2,0.1,0.05,0.02,0.01]
+    }
+    
+    struct StoreOptions {
+        static let bakery       = "Bakkerij"
+        static let butcher      = "Beenhouwerij"
+        static let veggieFarmer = "Groentewinkel"
+        static let fruitshop    = "Fruitwinkel"
+        static let toyStore     = "Speelgoedwinkel"
+        static let sportStore   = "Sportwinkel"
     }
     
 }
