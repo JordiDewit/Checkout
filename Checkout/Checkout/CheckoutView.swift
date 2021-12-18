@@ -5,13 +5,13 @@
 
 
 import SwiftUI
+import AVFoundation
 
 // main view
 struct CheckoutView: View {
     
     // viewmodel dependency
     @ObservedObject var viewModel: CheckoutViewModel
-    
     
     var body: some View {
        
@@ -21,7 +21,7 @@ struct CheckoutView: View {
                     .font(.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
                         .transition(.opacity)
                 Spacer()
-                Text("Score: \(viewModel.getScore())")
+                Text("Score: \(viewModel.getScore())/5")
                     .font(Font.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
             }
             VStack{
@@ -34,6 +34,7 @@ struct CheckoutView: View {
                         .onTapGesture {
                             withAnimation{
                                 viewModel.giveMoney(payed: -viewModel.payed)
+                                AudioServicesPlaySystemSound(1100)
                             }
                         }
                         .font(Font.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
@@ -59,19 +60,19 @@ struct CheckoutView: View {
                 .opacity(0.5)
             )
     }
- 
     // the cash register which receives the money
     var cashRegister: some View {
         Image("cashRegister")
             .resizable()
-            .frame(width: 180, height: 180)
-            //.onDrop(of: [String], delegate: viewModel.giveMoney(payed: value))
+            .frame(width: Constants.crSize, height: Constants.crSize)
+            .onDrop(of: ["public.text"], delegate: dropDelegate(viewModel: viewModel))
     }
-    // button to quit the game
+    // button to quit the game*9-
     var stopGame: some View {
         Button(
            action: {
                //intentionally still blank
+               AudioServicesPlaySystemSound(1100)
         },
            label: {
                Text("Stop")
@@ -88,6 +89,7 @@ struct CheckoutView: View {
            action: {
                withAnimation{
                    viewModel.pay(for: viewModel.productOnScreen)
+                   AudioServicesPlaySystemSound(1100)
                }
         },
            label: {
@@ -120,13 +122,8 @@ struct CheckoutView: View {
                             .stroke(Color.black, lineWidth: 3))
                             .shadow(radius: 10)
                             .onDrag{
-                                return NSItemProvider(object: img as NSString)
+                                NSItemProvider(object: String(value) as NSString)
                             }
-                            /*.onTapGesture {
-                                withAnimation{
-                                    viewModel.giveMoney(payed: value)
-                                }
-                            }*/
                     }else{
                         let img: String = compareCashValue(from: value)
                         Image(img)
@@ -136,16 +133,15 @@ struct CheckoutView: View {
                             .overlay(RoundedRectangle(cornerRadius: 50)
                             .stroke(Color.black, lineWidth: 3))
                             .shadow(radius: 50)
-                            .onTapGesture {
-                                withAnimation{
-                                    viewModel.giveMoney(payed: value)
-                                }
+                            .onDrag{
+                                NSItemProvider(object: String(value) as NSString)
                             }
                     }
                 }
         }
         .padding(.all, -11.0)
     }
+    
 
         
         func compareCashValue(from value: Double) -> String{
@@ -197,10 +193,38 @@ struct ProductView: View{
         }
         .padding()
     }
+
 }
 
+struct dropDelegate : DropDelegate{
+    // Bind to the viewModel
+    var viewModel: CheckoutViewModel
+    //  This function is executed when the user "drops" their object
+    func performDrop(info: DropInfo) -> Bool {
+        //  Check if there's an array of items with the URI "public.text" in the DropInfo
+        if let item = info.itemProviders(for: ["public.text"]).first {
+            //  Load the item
+            item.loadItem(forTypeIdentifier: "public.text", options: nil) { (text, err) in
+                //  Cast NSSecureCoding to Ddata
+                if let data = text as? Data {
+                    //  Extract string from data
+                    let input = String(decoding: data, as: UTF8.self)
+                    // main thread
+                    DispatchQueue.main.async {
+                        viewModel.giveMoney(payed: Double(input) ?? 0)
+                      }
+                    
+                }
+            }
+        } else {
+            //  If no text was received in our drop, return false
+            return false
+        }
 
+        return true
+    }
 
+}
 
 
 
@@ -208,6 +232,7 @@ struct ProductView: View{
 struct Constants{
     static let fontSize: CGFloat = 120
     static let fontSize2: CGFloat = 36
+    static let crSize: CGFloat = 180
 }
 
 

@@ -3,14 +3,16 @@
 
 import Foundation
 
-
 struct Store{
     
     private(set) var name: String
     private(set) var products: Array<Product>
     private(set) var productOnScreen: Product
+    private(set) var productCount: Int
     private(set) var score: Int
     private(set) var payed: Double
+    
+    private let maxProducts: Int = 4
     
     //INITIALISER
     
@@ -25,6 +27,7 @@ struct Store{
             products.append(Product(id: i, img: emo, price: price))
         }
         productOnScreen = products[0]
+        productCount = 1
     }
     
     //FUNCTIONS
@@ -34,8 +37,9 @@ struct Store{
             $0.id == productOnScreen.id
         })!
         
-        if i == 0 || i < products.count-1 {
+        if i == 0 || i < maxProducts{
             productOnScreen = products[i+1]
+            productCount += 1
         }else{
             print("We are done")
         }
@@ -49,9 +53,10 @@ struct Store{
         payed = value
         if payed == product.price{
             score+=1
+            print(score)
         }
+        payed -= payed
         getNextProduct()
-        payed = 0
     }
     
     //STRUCTS
