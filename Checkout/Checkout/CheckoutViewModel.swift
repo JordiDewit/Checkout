@@ -26,11 +26,9 @@ class CheckoutViewModel: ObservableObject
     
     // building the store (game)
     static func buildStore() -> Store {
-        
         return Store(chosenStore: StoreOptions.veggieFarmer, numberOfProducts: 5, createImg: { index in
             KindsOfProducts.veggieFarmer[index]
         })
-        
     }
     
     // getter for the storename
@@ -61,7 +59,6 @@ class CheckoutViewModel: ObservableObject
         return model.score
     }
  
-    
     // different kinds of products depending of kind of store the user has chosen
     struct KindsOfProducts {
         static let bakery       = ["🥖","🍞","🥯","🥐","🧇","🥞","🥨","🥧","🍰","🧁","🍪","🍩"]
@@ -79,6 +76,7 @@ class CheckoutViewModel: ObservableObject
         static let hardMoney: Array<Double>   =  [50,20,10,5,2,1,0.5,0.2,0.1,0.05,0.02,0.01]
     }
     
+    //The store options for choosing which kinds of products they want to buy
     struct StoreOptions {
         static let bakery       = "Bakkerij"
         static let butcher      = "Beenhouwerij"
@@ -87,7 +85,6 @@ class CheckoutViewModel: ObservableObject
         static let toyStore     = "Speelgoedwinkel"
         static let sportStore   = "Sportwinkel"
     }
-    
 }
 
 

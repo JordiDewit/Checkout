@@ -14,34 +14,76 @@ struct CheckoutView: View {
     
     
     var body: some View {
+       
         VStack{
-            Text(viewModel.getStoreName())
-                .font(Font.system(size: Constants.fontSize2))
-            Spacer()
-            ProductView(show: viewModel.productOnScreen)
-            Spacer()
             HStack{
-                Text("€ \(viewModel.payed, specifier: "%.2f")")
-                    .font(Font.system(size: Constants.fontSize2))
-                Image(systemName: "delete.backward")
-                    .onTapGesture {
-                        viewModel.giveMoney(payed: -viewModel.payed)
-                    }
+                Text(viewModel.getStoreName().uppercased())
+                    .font(.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
+                        .transition(.opacity)
+                Spacer()
+                Text("Score: \(viewModel.getScore())")
+                    .font(Font.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
             }
-            Spacer()
-            moneyView
-            Spacer()
-            payProduct
-            Text("Score: \(viewModel.getScore())")
-                .font(Font.system(size: Constants.fontSize2))
+            VStack{
+                ProductView(show: viewModel.productOnScreen)
+                cashRegister
+                HStack{
+                    Text("€ \(viewModel.payed, specifier: "%.2f")")
+                        .font(Font.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
+                    Image(systemName: "delete.backward")
+                        .onTapGesture {
+                            withAnimation{
+                                viewModel.giveMoney(payed: -viewModel.payed)
+                            }
+                        }
+                        .font(Font.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
+                }
+                .padding()
+                
+            }
+                Spacer()
+                moneyView
+                Spacer()
+            HStack{
+                stopGame
+                Spacer()
+                payProduct
+            }
         }
         .padding()
-        .background(Color.cyan)
-        
+        .background(
+            Image("store")
+                .resizable()
+                .edgesIgnoringSafeArea(.all)
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                .opacity(0.5)
+            )
     }
-    
+ 
+    // the cash register which receives the money
+    var cashRegister: some View {
+        Image("cashRegister")
+            .resizable()
+            .frame(width: 180, height: 180)
+            //.onDrop(of: [String], delegate: viewModel.giveMoney(payed: value))
+    }
+    // button to quit the game
+    var stopGame: some View {
+        Button(
+           action: {
+               //intentionally still blank
+        },
+           label: {
+               Text("Stop")
+                   .font(Font.system(size: 26, weight: .heavy, design: .rounded))
+        })
+        .padding()
+        .foregroundColor(.black)
+        .background(LinearGradient(gradient: Gradient(colors: [Color.red, Color.yellow]), startPoint: .top, endPoint: .bottom))
+        .cornerRadius(40)
+    }
+    // pay a product button
     var payProduct: some View {
-        
         Button(
            action: {
                withAnimation{
@@ -50,37 +92,59 @@ struct CheckoutView: View {
         },
            label: {
                Text("Betaal")
-                   .foregroundColor(.black)
-                   .font(Font.system(size: 32))
+                   .font(Font.system(size: 26, weight: .heavy, design: .rounded))
         })
         .padding()
-        .background(RoundedRectangle(cornerRadius: 15)
-        .opacity(0.2))
+        .foregroundColor(.black)
+        .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.yellow]), startPoint: .top, endPoint: .bottom))
+        .cornerRadius(40)
     }
     
-        
+    // money grid
     var moneyView: some View {
-            
-                LazyVGrid(columns: [
-                    GridItem(.adaptive(minimum: 50, maximum: 50)),
-                            GridItem(.adaptive(minimum: 50, maximum: 50)),
-                            GridItem(.adaptive(minimum: 50, maximum: 50)),
-                            GridItem(.adaptive(minimum: 50, maximum: 50)),
-                          ], content: {
-                              ForEach(viewModel.getCash(), id: \.self) { value in
-                                 let img: String = compareCashValue(from: value)
-                                     Image(img)
-                                     .resizable()
-                                     .aspectRatio(contentMode: .fit)
-                                     .frame(width: 50, height: 50)
-                                     .onTapGesture {
-                                         withAnimation{
-                                             viewModel.giveMoney(payed: value)
-                                         }
-                                     }
-                             }
-                          })
-                .padding()
+        
+        let layout = [
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ]
+        
+        return LazyHGrid(rows: layout, spacing: 20){
+            ForEach(viewModel.getCash(), id: \.self) { value in
+                    if(value > 2){
+                        let img: String = compareCashValue(from: value)
+                            Image(img)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 140, height: 70)
+                            .overlay(RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.black, lineWidth: 3))
+                            .shadow(radius: 10)
+                            .onDrag{
+                                return NSItemProvider(object: img as NSString)
+                            }
+                            /*.onTapGesture {
+                                withAnimation{
+                                    viewModel.giveMoney(payed: value)
+                                }
+                            }*/
+                    }else{
+                        let img: String = compareCashValue(from: value)
+                        Image(img)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 60, height: 60)
+                            .overlay(RoundedRectangle(cornerRadius: 50)
+                            .stroke(Color.black, lineWidth: 3))
+                            .shadow(radius: 50)
+                            .onTapGesture {
+                                withAnimation{
+                                    viewModel.giveMoney(payed: value)
+                                }
+                            }
+                    }
+                }
+        }
+        .padding(.all, -11.0)
     }
 
         
@@ -115,9 +179,6 @@ struct CheckoutView: View {
 }
 
 
-
-
-
 // Product view
 struct ProductView: View{
     
@@ -129,11 +190,10 @@ struct ProductView: View{
     
     var body: some View{
         VStack{
+            Text("€ \(product.price, specifier: "%.2f")")
+                .font(Font.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
             Text(product.img)
                 .font(Font.system(size: Constants.fontSize))
-            Text("€ \(product.price, specifier: "%.2f")")
-                .font(Font.system(size: Constants.fontSize2))
-            
         }
         .padding()
     }
@@ -146,12 +206,8 @@ struct ProductView: View{
 
 // constants that must be used all the time
 struct Constants{
-    static let fontSize: CGFloat = 80
-    static let fontSize2: CGFloat = 32
-    static let cornerRadius: CGFloat = 15
-    static let coinWidthHeight: CGFloat = 35
-    static let billWidth: CGFloat = 40
-    static let billHeight: CGFloat = 25
+    static let fontSize: CGFloat = 120
+    static let fontSize2: CGFloat = 36
 }
 
 
@@ -188,7 +244,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = CheckoutViewModel()
         return CheckoutView(viewModel: viewModel)
-            .preferredColorScheme(.dark)
-.previewInterfaceOrientation(.portraitUpsideDown)
+            .preferredColorScheme(.light)
+.previewInterfaceOrientation(.portrait)
     }
 }

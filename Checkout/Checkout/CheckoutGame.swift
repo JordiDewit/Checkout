@@ -46,7 +46,10 @@ struct Store{
     }
     
     mutating func pay(payed value: Double, for product: Product){
-        score += 1
+        payed = value
+        if payed == product.price{
+            score+=1
+        }
         getNextProduct()
         payed = 0
     }
