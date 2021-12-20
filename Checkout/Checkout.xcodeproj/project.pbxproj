@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		501D974E276F6CE4004C973B /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501D974D276F6CE4004C973B /* StartView.swift */; };
+		501D975027707A2B004C973B /* StartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501D974F27707A2B004C973B /* StartViewModel.swift */; };
 		504D2334274D7C9300DB2C76 /* CheckoutGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D2333274D7C9300DB2C76 /* CheckoutGame.swift */; };
 		504D2336274D824C00DB2C76 /* CheckoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D2335274D824C00DB2C76 /* CheckoutViewModel.swift */; };
 		508360B7274CD07500FC3025 /* CheckoutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508360B6274CD07500FC3025 /* CheckoutApp.swift */; };
@@ -16,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		501D974D276F6CE4004C973B /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
+		501D974F27707A2B004C973B /* StartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewModel.swift; sourceTree = "<group>"; };
 		504D2333274D7C9300DB2C76 /* CheckoutGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutGame.swift; sourceTree = "<group>"; };
 		504D2335274D824C00DB2C76 /* CheckoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutViewModel.swift; sourceTree = "<group>"; };
 		508360B3274CD07500FC3025 /* Checkout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Checkout.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -56,7 +60,9 @@
 			isa = PBXGroup;
 			children = (
 				504D2333274D7C9300DB2C76 /* CheckoutGame.swift */,
+				501D974F27707A2B004C973B /* StartViewModel.swift */,
 				504D2335274D824C00DB2C76 /* CheckoutViewModel.swift */,
+				501D974D276F6CE4004C973B /* StartView.swift */,
 				508360B6274CD07500FC3025 /* CheckoutApp.swift */,
 				508360B8274CD07500FC3025 /* CheckoutView.swift */,
 				508360BA274CD07600FC3025 /* Assets.xcassets */,
@@ -144,6 +150,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				504D2336274D824C00DB2C76 /* CheckoutViewModel.swift in Sources */,
+				501D975027707A2B004C973B /* StartViewModel.swift in Sources */,
+				501D974E276F6CE4004C973B /* StartView.swift in Sources */,
 				508360B9274CD07500FC3025 /* CheckoutView.swift in Sources */,
 				504D2334274D7C9300DB2C76 /* CheckoutGame.swift in Sources */,
 				508360B7274CD07500FC3025 /* CheckoutApp.swift in Sources */,

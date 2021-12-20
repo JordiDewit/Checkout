@@ -12,10 +12,13 @@ struct CheckoutView: View {
     
     // viewmodel dependency
     @ObservedObject var viewModel: CheckoutViewModel
-    
+    @State var goToStartingView: Bool = false
+    @State var gameIsOver: Bool = false
+    @Environment(\.presentationMode) var presentationMode
+   
     var body: some View {
-       
         VStack{
+            Spacer(minLength: 20)
             HStack{
                 Text(viewModel.getStoreName().uppercased())
                     .font(.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
@@ -50,6 +53,7 @@ struct CheckoutView: View {
                 Spacer()
                 payProduct
             }
+            Spacer(minLength: 20)
         }
         .padding()
         .background(
@@ -71,12 +75,16 @@ struct CheckoutView: View {
     var stopGame: some View {
         Button(
            action: {
-               //intentionally still blank
                AudioServicesPlaySystemSound(1100)
+               gameIsOver = false
+               goToStartingView.toggle()
         },
            label: {
                Text("Stop")
                    .font(Font.system(size: 26, weight: .heavy, design: .rounded))
+        }).fullScreenCover(isPresented: $goToStartingView, content: {
+            //fresh start initial entry
+            StartView(startViewModel: StartViewModel(), nextViewModel: CheckoutViewModel())
         })
         .padding()
         .foregroundColor(.black)
@@ -90,11 +98,16 @@ struct CheckoutView: View {
                withAnimation{
                    viewModel.pay(for: viewModel.productOnScreen)
                    AudioServicesPlaySystemSound(1100)
+                   if viewModel.isOver() {
+                       gameIsOver = true
+                   }
                }
         },
            label: {
                Text("Betaal")
                    .font(Font.system(size: 26, weight: .heavy, design: .rounded))
+           }).fullScreenCover(isPresented: $gameIsOver, content: {
+               endView
         })
         .padding()
         .foregroundColor(.black)
@@ -142,6 +155,48 @@ struct CheckoutView: View {
         .padding(.all, -11.0)
     }
     
+    var endView: some View {
+        VStack{
+            Text("Jouw score:")
+                .font(.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
+                    .transition(.opacity)
+            Spacer()
+            Text("\(viewModel.getScore())/5")
+                .font(.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
+                    .transition(.opacity)
+            Text(compareScore(for: viewModel.getScore()))
+                .font(.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
+                    .transition(.opacity)
+            Spacer()
+            stopGame
+        
+        }
+        .padding()
+        .background(
+            Image("home")
+                .resizable()
+                .edgesIgnoringSafeArea(.all)
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                .opacity(0.5)
+            )
+    }
+    
+    func compareScore(for score: Int) -> String {
+        switch score {
+        case 0:
+            return "Je moet nog veel oefenen.."
+        case 1:
+            return "Niet goed, oefen nog maar een beetje!"
+        case 2:
+            return "Dit kan beter."
+        case 3:
+            return "Goed gedaan, je bent er bijna.."
+        case 4:
+            return "Super! Je wordt nog een echte kampioen!"
+        default:
+            return "Je bent gewoon een rekenkampioen!"
+        }
+    }
 
         
         func compareCashValue(from value: Double) -> String{
@@ -265,11 +320,11 @@ struct Constants{
 
 
 
-struct ContentView_Previews: PreviewProvider {
+/*struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = CheckoutViewModel()
         return CheckoutView(viewModel: viewModel)
             .preferredColorScheme(.light)
 .previewInterfaceOrientation(.portrait)
     }
-}
+}*/

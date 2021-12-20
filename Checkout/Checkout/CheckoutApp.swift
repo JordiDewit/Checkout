@@ -10,12 +10,13 @@ import SwiftUI
 @main
 struct CheckoutApp: App {
     
-    private let viewModel = CheckoutViewModel()
+    private let startViewModel = StartViewModel()
+    private let nextViewModel  = CheckoutViewModel()
     
     
     var body: some Scene {
         WindowGroup {
-            CheckoutView(viewModel: viewModel)
+            StartView(startViewModel: startViewModel, nextViewModel: nextViewModel)
         }
     }
 }

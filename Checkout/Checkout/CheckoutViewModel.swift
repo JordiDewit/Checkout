@@ -9,6 +9,8 @@ class CheckoutViewModel: ObservableObject
 {
     // model with which we communicate
     @Published private var model = buildStore()
+    static var defaultStore: String = "Bakkerij"
+    
     typealias Product = Store.Product
 
     // computed property with products
@@ -26,14 +28,15 @@ class CheckoutViewModel: ObservableObject
     
     // building the store (game)
     static func buildStore() -> Store {
-        return Store(chosenStore: StoreOptions.veggieFarmer, numberOfProducts: 5, createImg: { index in
-            KindsOfProducts.veggieFarmer[index]
-        })
+        return Store()
+    }
+    func setName(store: String){
+        model.setName(storeOption: store)
     }
     
     // getter for the storename
     func getStoreName() -> String{
-        return model.name
+        return model.name!
     }
     
     // get cash (levels must be still implemented)
@@ -57,6 +60,10 @@ class CheckoutViewModel: ObservableObject
     // getter for score
     func getScore() -> Int{
         return model.score
+    }
+    // check if it is the end of the game
+    func isOver() -> Bool {
+        return model.endOfGame
     }
  
     // different kinds of products depending of kind of store the user has chosen
