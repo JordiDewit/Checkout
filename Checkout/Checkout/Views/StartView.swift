@@ -19,28 +19,34 @@ struct StartView: View {
             VStack{
                 Image("checkout")
                     .cornerRadius(30)
-                    Spacer()
-                Text("Kies een winkel:")
-                    .font(Font.system(size: 30, weight: .heavy, design: .rounded))
-                Picker("Kies een winkel", selection: $startViewModel.storeOption) {
-                        ForEach(stores, id: \.self) {
-                            Text($0)
-                                .font(Font.system(size: 28, weight: .heavy, design: .rounded))
-                        }
-                    }
-                .pickerStyle(.inline)
+                Spacer()
                 HStack{
-                    Spacer()
-                }
-                Text("Kies een niveau:")
-                    .font(Font.system(size: 30, weight: .heavy, design: .rounded))
-                Picker("Kies een niveau", selection: $startViewModel.level) {
-                        ForEach(levels, id: \.self) {
-                            Text($0)
-                                .font(Font.system(size: 28, weight: .heavy, design: .rounded))
-                        }
+                    VStack{
+                        Text("Kies een winkel:")
+                            .font(Font.system(size: 30, weight: .heavy, design: .rounded))
+                        Picker("Kies een winkel", selection: $startViewModel.storeOption) {
+                                ForEach(stores, id: \.self) {
+                                    Text($0)
+                                        .font(Font.system(size: 28, weight: .heavy, design: .rounded))
+                                }
+                            }
+                            .pickerStyle(.inline)
                     }
-                .pickerStyle(.inline)
+                   
+                    Spacer()
+                    VStack{
+                        Text("Kies een niveau:")
+                            .font(Font.system(size: 30, weight: .heavy, design: .rounded))
+                        Picker("Kies een niveau", selection: $startViewModel.level) {
+                                ForEach(levels, id: \.self) {
+                                    Text($0)
+                                        .font(Font.system(size: 28, weight: .heavy, design: .rounded))
+                                }
+                            }
+                        .pickerStyle(.inline)
+                    }
+                }
+               
                 Spacer()
                 Button(action: {
                     AudioServicesPlaySystemSound(1100)
@@ -60,7 +66,6 @@ struct StartView: View {
                          }.fullScreenCover(isPresented: $goToNextView, content: {
                                     CheckoutView(viewModel: nextViewModel)
                                 })
-                    .padding()
                     .foregroundColor(.black)
                     .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.yellow]), startPoint: .top, endPoint: .bottom))
                     .cornerRadius(40)
@@ -86,5 +91,6 @@ struct StartView_Previews: PreviewProvider {
         let startViewModel = StartViewModel()
         let nextViewModel  = CheckoutViewModel()
         StartView(startViewModel: startViewModel, nextViewModel: nextViewModel)
+.previewInterfaceOrientation(.portraitUpsideDown)
     }
 }
