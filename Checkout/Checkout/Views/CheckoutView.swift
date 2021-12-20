@@ -15,6 +15,8 @@ struct CheckoutView: View {
     @State var goToStartingView: Bool = false
     @State var gameIsOver: Bool = false
     @Environment(\.presentationMode) var presentationMode
+    
+    
    
     var body: some View {
         VStack{
@@ -100,6 +102,7 @@ struct CheckoutView: View {
                    AudioServicesPlaySystemSound(1100)
                    if viewModel.isOver() {
                        gameIsOver = true
+                       playSound(sound: "end", type: "mp3")
                    }
                }
         },
@@ -267,6 +270,7 @@ struct dropDelegate : DropDelegate{
                     // main thread
                     DispatchQueue.main.async {
                         viewModel.giveMoney(payed: Double(input) ?? 0)
+                        playSound(sound: "cashre", type: "mp3")
                       }
                     
                 }

@@ -17,9 +17,9 @@ struct StartView: View {
     
     var body: some View {
             VStack{
-                Text("CHECKOUT")
-                    .font(Font.system(size: 50, weight: .heavy, design: .rounded))
-                Spacer()
+                Image("checkout")
+                    .cornerRadius(30)
+                    Spacer()
                 Text("Kies een winkel:")
                     .font(Font.system(size: 30, weight: .heavy, design: .rounded))
                 Picker("Kies een winkel", selection: $startViewModel.storeOption) {
@@ -41,8 +41,10 @@ struct StartView: View {
                         }
                     }
                 .pickerStyle(.inline)
+                Spacer()
                 Button(action: {
                     AudioServicesPlaySystemSound(1100)
+                    audioPlayer?.stop()
                     if startViewModel.level == "Makkelijk"{
                         nextViewModel.setNameAndLevel(store: startViewModel.storeOption, level: 1)
                     }else if startViewModel.level == "Normaal"{
@@ -71,6 +73,9 @@ struct StartView: View {
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                     .opacity(0.5)
                 )
+            .onAppear(perform: {
+                playSound(sound: "backgroundm", type: "mp3")
+            })
        }
 }
 
