@@ -9,4 +9,5 @@ import Foundation
 
 class StartViewModel: ObservableObject{
     @Published var storeOption: String = "Bakkerij"
+    @Published var level: String = "Makkelijk"
 }

@@ -13,6 +13,7 @@ struct StartView: View {
     @ObservedObject var nextViewModel: CheckoutViewModel
     @State var goToNextView: Bool = false
     let stores = ["Bakkerij", "Beenhouwerij", "Fruitwinkel", "Groentewinkel", "Speelgoedwinkel", "Sportwinkel"]
+    let levels = ["Makkelijk", "Normaal", "Moeilijk"]
     
     var body: some View {
             VStack{
@@ -28,13 +29,27 @@ struct StartView: View {
                         }
                     }
                 .pickerStyle(.inline)
-                Spacer()
                 HStack{
                     Spacer()
                 }
+                Text("Kies een niveau:")
+                    .font(Font.system(size: 30, weight: .heavy, design: .rounded))
+                Picker("Kies een niveau", selection: $startViewModel.level) {
+                        ForEach(levels, id: \.self) {
+                            Text($0)
+                                .font(Font.system(size: 28, weight: .heavy, design: .rounded))
+                        }
+                    }
+                .pickerStyle(.inline)
                 Button(action: {
                     AudioServicesPlaySystemSound(1100)
-                    nextViewModel.setName(store: startViewModel.storeOption)
+                    if startViewModel.level == "Makkelijk"{
+                        nextViewModel.setNameAndLevel(store: startViewModel.storeOption, level: 1)
+                    }else if startViewModel.level == "Normaal"{
+                        nextViewModel.setNameAndLevel(store: startViewModel.storeOption, level: 2)
+                    }else{
+                        nextViewModel.setNameAndLevel(store: startViewModel.storeOption, level: 3)
+                    }
                     goToNextView.toggle()
                          }){
                            Text("Speel")
