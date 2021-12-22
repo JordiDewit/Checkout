@@ -9,7 +9,8 @@ class CheckoutViewModel: ObservableObject
 {
     // model with which we communicate
     @Published private var model = buildStore()
-    static var defaultStore: String = "Bakkerij"
+    @Published var players = [Player]()
+    var playerID: UUID?
     
     typealias Product = Store.Product
 
@@ -64,6 +65,38 @@ class CheckoutViewModel: ObservableObject
     // check if it is the end of the game
     func isOver() -> Bool {
         return model.endOfGame
+    }
+    func createPlayer(name: String) async throws {
+        let urlString = APIConstants.basicURL + Endpoints.players
+        
+        // make sure URL exists
+        guard let url = URL(string: urlString) else {
+            throw HttpError.badURL
+        }
+        
+        let player = Player(id: nil, name: name, scores: [])
+        
+        try await HttpClient.shared.createData(to: url, object: player, httpMethod: HTTPMethods.POST.rawValue)
+    }
+    
+    func checkIfPlayerExists(){
+        // must be implemented
+    }
+    
+    func getPlayers() async throws {
+        let urlString = APIConstants.basicURL + Endpoints.players
+        
+        // make sure URL exists
+        guard let url = URL(string: urlString) else {
+            throw HttpError.badURL
+        }
+        
+        let songResponse: [Player] = try await HttpClient.shared.fetch(url: url)
+        
+        // must happen on main thread
+        DispatchQueue.main.async {
+            self.players = songResponse
+        }
     }
     
 }

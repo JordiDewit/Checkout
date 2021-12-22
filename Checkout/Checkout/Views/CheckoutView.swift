@@ -171,6 +171,19 @@ struct CheckoutView: View {
                 .font(.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
                     .transition(.opacity)
             Spacer()
+            // here comes a list of previous scores
+            Text("Players")
+                .font(.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
+                    .transition(.opacity)
+    
+            // scores from the player will come here 
+                ForEach(viewModel.players) {
+                    player in
+                     Text(player.name)
+                        .font(.system(size: 18, weight: .heavy, design: .rounded))
+                            .transition(.opacity)
+                }
+
             stopGame
         
         }
@@ -182,6 +195,15 @@ struct CheckoutView: View {
                 .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                 .opacity(0.5)
             )
+        .onAppear{
+            Task{
+                do{
+                    try await viewModel.getPlayers()
+                }catch{
+                    print("Error fetching: \(error)")
+                }
+            }
+        }
     }
     
     func compareScore(for score: Int) -> String {

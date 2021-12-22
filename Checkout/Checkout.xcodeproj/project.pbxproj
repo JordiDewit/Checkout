@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		501D974E276F6CE4004C973B /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501D974D276F6CE4004C973B /* StartView.swift */; };
 		501D975027707A2B004C973B /* StartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501D974F27707A2B004C973B /* StartViewModel.swift */; };
+		5044368B27736F2E007E0E6A /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5044368A27736F2E007E0E6A /* Player.swift */; };
+		5044368E2773723A007E0E6A /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5044368D2773723A007E0E6A /* HttpClient.swift */; };
+		504436902773741F007E0E6A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5044368F2773741F007E0E6A /* Constants.swift */; };
 		504D2334274D7C9300DB2C76 /* CheckoutGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D2333274D7C9300DB2C76 /* CheckoutGame.swift */; };
 		504D2336274D824C00DB2C76 /* CheckoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D2335274D824C00DB2C76 /* CheckoutViewModel.swift */; };
 		508360B7274CD07500FC3025 /* CheckoutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508360B6274CD07500FC3025 /* CheckoutApp.swift */; };
@@ -24,6 +27,9 @@
 /* Begin PBXFileReference section */
 		501D974D276F6CE4004C973B /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		501D974F27707A2B004C973B /* StartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewModel.swift; sourceTree = "<group>"; };
+		5044368A27736F2E007E0E6A /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		5044368D2773723A007E0E6A /* HttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpClient.swift; sourceTree = "<group>"; };
+		5044368F2773741F007E0E6A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		504D2333274D7C9300DB2C76 /* CheckoutGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutGame.swift; sourceTree = "<group>"; };
 		504D2335274D824C00DB2C76 /* CheckoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutViewModel.swift; sourceTree = "<group>"; };
 		508360B3274CD07500FC3025 /* Checkout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Checkout.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,6 +54,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5044368927736E44007E0E6A /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				504D2335274D824C00DB2C76 /* CheckoutViewModel.swift */,
+				501D974F27707A2B004C973B /* StartViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		5044368C2773722A007E0E6A /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				50C0983D2770D86D00A952A3 /* PlaySound.swift */,
+				5044368D2773723A007E0E6A /* HttpClient.swift */,
+				5044368F2773741F007E0E6A /* Constants.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		508360AA274CD07400FC3025 = {
 			isa = PBXGroup;
 			children = (
@@ -67,10 +92,11 @@
 		508360B5274CD07500FC3025 /* Checkout */ = {
 			isa = PBXGroup;
 			children = (
+				5044368C2773722A007E0E6A /* Utilities */,
+				5044368927736E44007E0E6A /* ViewModels */,
 				50C098412770DAF000A952A3 /* Sounds */,
 				50C098402770D94E00A952A3 /* Views */,
 				50C0983F2770D93F00A952A3 /* Models */,
-				50C0983D2770D86D00A952A3 /* PlaySound.swift */,
 				508360B6274CD07500FC3025 /* CheckoutApp.swift */,
 				508360BA274CD07600FC3025 /* Assets.xcassets */,
 				508360BC274CD07600FC3025 /* Preview Content */,
@@ -89,9 +115,8 @@
 		50C0983F2770D93F00A952A3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				504D2335274D824C00DB2C76 /* CheckoutViewModel.swift */,
-				501D974F27707A2B004C973B /* StartViewModel.swift */,
 				504D2333274D7C9300DB2C76 /* CheckoutGame.swift */,
+				5044368A27736F2E007E0E6A /* Player.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -192,6 +217,9 @@
 				50C0983E2770D86D00A952A3 /* PlaySound.swift in Sources */,
 				501D975027707A2B004C973B /* StartViewModel.swift in Sources */,
 				501D974E276F6CE4004C973B /* StartView.swift in Sources */,
+				5044368E2773723A007E0E6A /* HttpClient.swift in Sources */,
+				504436902773741F007E0E6A /* Constants.swift in Sources */,
+				5044368B27736F2E007E0E6A /* Player.swift in Sources */,
 				508360B9274CD07500FC3025 /* CheckoutView.swift in Sources */,
 				504D2334274D7C9300DB2C76 /* CheckoutGame.swift in Sources */,
 				508360B7274CD07500FC3025 /* CheckoutApp.swift in Sources */,
@@ -342,7 +370,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -371,7 +399,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};

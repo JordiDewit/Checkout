@@ -116,6 +116,7 @@ struct Store{
     }
 }
 
+// This can maybe come from a REST API
 struct KindsOfProducts {
     static let bakery       = ["🥖","🍞","🥯","🥐","🧇","🥞","🥨","🥧","🍰","🧁","🍪","🍩"]
     static let butcher      = ["🥩","🥓","🍖","🍗","🦴","🍔"]

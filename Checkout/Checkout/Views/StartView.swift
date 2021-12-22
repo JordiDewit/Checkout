@@ -12,13 +12,23 @@ struct StartView: View {
     @ObservedObject var startViewModel: StartViewModel
     @ObservedObject var nextViewModel: CheckoutViewModel
     @State var goToNextView: Bool = false
-    let stores = ["Bakkerij", "Beenhouwerij", "Fruitwinkel", "Groentewinkel", "Speelgoedwinkel", "Sportwinkel"]
-    let levels = ["Makkelijk", "Normaal", "Moeilijk"]
+    private let stores = ["Bakkerij", "Beenhouwerij", "Fruitwinkel", "Groentewinkel", "Speelgoedwinkel", "Sportwinkel"]
+    private let levels = ["Makkelijk", "Normaal", "Moeilijk"]
     
     var body: some View {
             VStack{
                 Image("checkout")
                     .cornerRadius(30)
+                Spacer()
+                //input for player name
+                VStack{
+                    Text("Wat is jouw spelernaam?")
+                        .font(Font.system(size: 30, weight: .heavy, design: .rounded))
+                    TextField("SpelerNaam...", text: $startViewModel.playerName)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
+                        .font(Font.system(size: 16, weight: .heavy, design: .rounded))
+                }
                 Spacer()
                 HStack{
                     VStack{
@@ -32,7 +42,6 @@ struct StartView: View {
                             }
                             .pickerStyle(.inline)
                     }
-                   
                     Spacer()
                     VStack{
                         Text("Kies een niveau:")
@@ -51,6 +60,15 @@ struct StartView: View {
                 Button(action: {
                     AudioServicesPlaySystemSound(1100)
                     audioPlayer?.stop()
+                    
+                    Task{
+                        do{
+                            try await nextViewModel.createPlayer(name: startViewModel.playerName)
+                        }catch{
+                            print("Error creating player \(error)")
+                        }
+                    }
+                    
                     if startViewModel.level == "Makkelijk"{
                         nextViewModel.setNameAndLevel(store: startViewModel.storeOption, level: 1)
                     }else if startViewModel.level == "Normaal"{
