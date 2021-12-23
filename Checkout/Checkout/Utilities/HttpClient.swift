@@ -8,7 +8,7 @@
 import Foundation
 
 enum HTTPMethods: String {
-    case POST,GET,DElETE
+    case POST,GET,DElETE,PUT
 }
 
 enum MIMEType: String {
@@ -43,6 +43,22 @@ class HttpClient {
         }
         return object
 
+    }
+    
+    func createPlayer<T: Codable>(to url: URL, object: T, httpMethod: String) async throws -> T {
+        var request = URLRequest(url: url)
+        request.httpMethod = httpMethod
+        request.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HttpHeaders.contenTpe.rawValue)
+        request.httpBody = try? JSONEncoder().encode(object)
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
+            throw HttpError.badResponse
+        }
+        guard let object = try? JSONDecoder().decode(T.self, from: data) else{
+            throw HttpError.errorDecodingData
+        }
+        return object
     }
     
     func createData<T: Codable>(to url: URL, object: T, httpMethod: String) async throws {

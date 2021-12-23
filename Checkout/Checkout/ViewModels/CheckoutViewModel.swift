@@ -9,11 +9,11 @@ class CheckoutViewModel: ObservableObject
 {
     // model with which we communicate
     @Published private var model = buildStore()
-    @Published var players = [Player]()
-    var playerID: UUID?
+    var player: Player?
     
     typealias Product = Store.Product
-
+    
+ 
     // computed property with products
     var products: Array<Store.Product>{
       return model.products
@@ -31,6 +31,7 @@ class CheckoutViewModel: ObservableObject
     static func buildStore() -> Store {
         return Store()
     }
+    
     func setNameAndLevel(store: String, level: Int){
         model.setNameAndLevel(storeOption: store, level: level)
     }
@@ -62,41 +63,34 @@ class CheckoutViewModel: ObservableObject
     func getScore() -> Int{
         return model.score
     }
+
     // check if it is the end of the game
     func isOver() -> Bool {
         return model.endOfGame
     }
-    func createPlayer(name: String) async throws {
+
+    // adding score to scoreboard from current player
+    func addScoreToScoreBoard(){
+        self.player?.scores.append(self.getScore())
+        Task{
+            do{
+                try await addScoreToPlayer()
+            }catch{
+                print("Error \(error)")
+            }
+        }
+    }
+    
+    func addScoreToPlayer() async throws {
         let urlString = APIConstants.basicURL + Endpoints.players
         
         // make sure URL exists
         guard let url = URL(string: urlString) else {
             throw HttpError.badURL
         }
+        let playerScoreToUpdate = Player(id: self.player!.id, name: self.player!.name, scores: self.player!.scores)
+        try await HttpClient.shared.createData(to: url, object: playerScoreToUpdate, httpMethod: HTTPMethods.PUT.rawValue)
         
-        let player = Player(id: nil, name: name, scores: [])
-        
-        try await HttpClient.shared.createData(to: url, object: player, httpMethod: HTTPMethods.POST.rawValue)
-    }
-    
-    func checkIfPlayerExists(){
-        // must be implemented
-    }
-    
-    func getPlayers() async throws {
-        let urlString = APIConstants.basicURL + Endpoints.players
-        
-        // make sure URL exists
-        guard let url = URL(string: urlString) else {
-            throw HttpError.badURL
-        }
-        
-        let songResponse: [Player] = try await HttpClient.shared.fetch(url: url)
-        
-        // must happen on main thread
-        DispatchQueue.main.async {
-            self.players = songResponse
-        }
     }
     
 }

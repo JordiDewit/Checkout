@@ -10,5 +10,5 @@ import Foundation
 struct Player: Identifiable, Codable{
     var id: UUID?
     var name: String
-    var scores: Array<Int32>
+    var scores: Array<Int>
 }

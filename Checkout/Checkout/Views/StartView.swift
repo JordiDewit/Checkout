@@ -12,8 +12,6 @@ struct StartView: View {
     @ObservedObject var startViewModel: StartViewModel
     @ObservedObject var nextViewModel: CheckoutViewModel
     @State var goToNextView: Bool = false
-    private let stores = ["Bakkerij", "Beenhouwerij", "Fruitwinkel", "Groentewinkel", "Speelgoedwinkel", "Sportwinkel"]
-    private let levels = ["Makkelijk", "Normaal", "Moeilijk"]
     
     var body: some View {
             VStack{
@@ -35,7 +33,7 @@ struct StartView: View {
                         Text("Kies een winkel:")
                             .font(Font.system(size: 30, weight: .heavy, design: .rounded))
                         Picker("Kies een winkel", selection: $startViewModel.storeOption) {
-                                ForEach(stores, id: \.self) {
+                            ForEach(Levels.levels, id: \.self) {
                                     Text($0)
                                         .font(Font.system(size: 28, weight: .heavy, design: .rounded))
                                 }
@@ -47,7 +45,7 @@ struct StartView: View {
                         Text("Kies een niveau:")
                             .font(Font.system(size: 30, weight: .heavy, design: .rounded))
                         Picker("Kies een niveau", selection: $startViewModel.level) {
-                                ForEach(levels, id: \.self) {
+                            ForEach(Stores.stores, id: \.self) {
                                     Text($0)
                                         .font(Font.system(size: 28, weight: .heavy, design: .rounded))
                                 }
@@ -60,23 +58,11 @@ struct StartView: View {
                 Button(action: {
                     AudioServicesPlaySystemSound(1100)
                     audioPlayer?.stop()
-                    
-                    Task{
-                        do{
-                            try await nextViewModel.createPlayer(name: startViewModel.playerName)
-                        }catch{
-                            print("Error creating player \(error)")
-                        }
+                    startViewModel.checkIfPlayerExist()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
+                        arrangeGameStart()
                     }
                     
-                    if startViewModel.level == "Makkelijk"{
-                        nextViewModel.setNameAndLevel(store: startViewModel.storeOption, level: 1)
-                    }else if startViewModel.level == "Normaal"{
-                        nextViewModel.setNameAndLevel(store: startViewModel.storeOption, level: 2)
-                    }else{
-                        nextViewModel.setNameAndLevel(store: startViewModel.storeOption, level: 3)
-                    }
-                    goToNextView.toggle()
                          }){
                            Text("Speel")
                                  .font(Font.system(size: 30, weight: .heavy, design: .rounded))
@@ -98,8 +84,27 @@ struct StartView: View {
                 )
             .onAppear(perform: {
                 playSound(sound: "backgroundm", type: "mp3")
+                Task{
+                    do{
+                        try await startViewModel.getPlayers()
+                    }catch{
+                        print("Error creating player \(error)")
+                    }
+                }
             })
        }
+    
+    func arrangeGameStart(){
+        nextViewModel.player = startViewModel.currentPlayer
+        if startViewModel.level == "Makkelijk"{
+            nextViewModel.setNameAndLevel(store: startViewModel.storeOption, level: 1)
+        }else if startViewModel.level == "Normaal"{
+            nextViewModel.setNameAndLevel(store: startViewModel.storeOption, level: 2)
+        }else{
+            nextViewModel.setNameAndLevel(store: startViewModel.storeOption, level: 3)
+        }
+        goToNextView.toggle()
+    }
 }
 
 

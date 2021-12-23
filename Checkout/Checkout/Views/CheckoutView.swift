@@ -103,6 +103,7 @@ struct CheckoutView: View {
                    if viewModel.isOver() {
                        gameIsOver = true
                        playSound(sound: "end", type: "mp3")
+                       viewModel.addScoreToScoreBoard()
                    }
                }
         },
@@ -172,15 +173,15 @@ struct CheckoutView: View {
                     .transition(.opacity)
             Spacer()
             // here comes a list of previous scores
-            Text("Players")
+            Text("\(viewModel.player!.name), jouw vorige scores..")
                 .font(.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
                     .transition(.opacity)
     
             // scores from the player will come here 
-                ForEach(viewModel.players) {
-                    player in
-                     Text(player.name)
-                        .font(.system(size: 18, weight: .heavy, design: .rounded))
+            ForEach(viewModel.player!.scores.prefix(10), id: \.self) {
+                    score in
+                     Text("\(score)/5")
+                        .font(.system(size: 24, weight: .heavy, design: .rounded))
                             .transition(.opacity)
                 }
 
@@ -195,14 +196,6 @@ struct CheckoutView: View {
                 .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                 .opacity(0.5)
             )
-        .onAppear{
-            Task{
-                do{
-                    try await viewModel.getPlayers()
-                }catch{
-                    print("Error fetching: \(error)")
-                }
-            }
         }
     }
     
@@ -252,7 +245,6 @@ struct CheckoutView: View {
                 return "1Cent"
             }
     }
-}
 
 
 // Product view
@@ -305,15 +297,6 @@ struct dropDelegate : DropDelegate{
         return true
     }
 
-}
-
-
-
-// constants that must be used all the time
-struct Constants{
-    static let fontSize: CGFloat = 120
-    static let fontSize2: CGFloat = 36
-    static let crSize: CGFloat = 180
 }
 
 
