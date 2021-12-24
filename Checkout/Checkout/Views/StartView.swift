@@ -11,7 +11,9 @@ import AVFoundation
 struct StartView: View {
     @ObservedObject var startViewModel: StartViewModel
     @ObservedObject var nextViewModel: CheckoutViewModel
+    @State var playBtnDisabled = true
     @State var goToNextView: Bool = false
+    @State var btnOpacity: CGFloat = 0.5
     
     var body: some View {
             VStack{
@@ -22,10 +24,17 @@ struct StartView: View {
                 VStack{
                     Text("Wat is jouw spelernaam?")
                         .font(Font.system(size: 30, weight: .heavy, design: .rounded))
-                    TextField("SpelerNaam...", text: $startViewModel.playerName)
+                    TextField("Spelernaam...", text: $startViewModel.playerName)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding()
                         .font(Font.system(size: 16, weight: .heavy, design: .rounded))
+                        .frame(width: 300)
+                        .onChange(of: startViewModel.playerName){newValue in
+                            if newValue != "" {
+                                self.playBtnDisabled = false
+                                self.btnOpacity = 1
+                            }
+                        }
                 }
                 Spacer()
                 HStack{
@@ -33,7 +42,7 @@ struct StartView: View {
                         Text("Kies een winkel:")
                             .font(Font.system(size: 30, weight: .heavy, design: .rounded))
                         Picker("Kies een winkel", selection: $startViewModel.storeOption) {
-                            ForEach(Levels.levels, id: \.self) {
+                            ForEach(Stores.stores, id: \.self) {
                                     Text($0)
                                         .font(Font.system(size: 28, weight: .heavy, design: .rounded))
                                 }
@@ -45,7 +54,7 @@ struct StartView: View {
                         Text("Kies een niveau:")
                             .font(Font.system(size: 30, weight: .heavy, design: .rounded))
                         Picker("Kies een niveau", selection: $startViewModel.level) {
-                            ForEach(Stores.stores, id: \.self) {
+                            ForEach(Levels.levels, id: \.self) {
                                     Text($0)
                                         .font(Font.system(size: 28, weight: .heavy, design: .rounded))
                                 }
@@ -73,6 +82,8 @@ struct StartView: View {
                     .foregroundColor(.black)
                     .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.yellow]), startPoint: .top, endPoint: .bottom))
                     .cornerRadius(40)
+                    .opacity(btnOpacity)
+                    .disabled(self.playBtnDisabled)
             }
             .padding()
             .background(
@@ -114,6 +125,6 @@ struct StartView_Previews: PreviewProvider {
         let startViewModel = StartViewModel()
         let nextViewModel  = CheckoutViewModel()
         StartView(startViewModel: startViewModel, nextViewModel: nextViewModel)
-.previewInterfaceOrientation(.portraitUpsideDown)
+.previewInterfaceOrientation(.landscapeRight)
     }
 }

@@ -35,7 +35,7 @@ class StartViewModel: ObservableObject{
         let sameNames = players?.filter{
             $0.name == self.playerName
         }
-        
+
         if sameNames?.count ?? 0 > 0{
             self.currentPlayer = players?.first(where: { p in
                 p.name == self.playerName

@@ -8,7 +8,7 @@
 import Foundation
 
 enum HTTPMethods: String {
-    case POST,GET,DElETE,PUT
+    case POST,GET,DELETE,PUT
 }
 
 enum MIMEType: String {
@@ -71,5 +71,15 @@ class HttpClient {
         guard (response as? HTTPURLResponse)?.statusCode == 200 else {
             throw HttpError.badResponse
         }
+    }
+    
+    func delete(id: UUID, url: URL) async throws {
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethods.DELETE.rawValue
+        let (_, response) = try await URLSession.shared.data(for: request)
+        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
+            throw HttpError.badResponse
+        }
+        
     }
 }

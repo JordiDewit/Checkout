@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 // constants that must be used all the time
 struct Constants{
@@ -16,7 +17,7 @@ struct Constants{
 
 enum APIConstants{
     // public url from ngrok file
-    static let basicURL = "https://8605-2a02-a03f-60e7-7900-7991-369d-766c-b882.ngrok.io/"
+    static let basicURL = "https://0239-81-245-62-144.ngrok.io/"
 }
 
 enum Endpoints {

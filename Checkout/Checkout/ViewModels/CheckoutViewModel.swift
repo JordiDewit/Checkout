@@ -93,6 +93,22 @@ class CheckoutViewModel: ObservableObject
         
     }
     
+    func deleteCurrentPlayer() async throws {
+        let playerID = self.player?.id
+       
+        guard let url = URL(string: APIConstants.basicURL + Endpoints.players + "/\(String(describing: playerID!))") else {
+            throw HttpError.badURL
+        }
+      
+        Task{
+            do{
+                try await HttpClient.shared.delete(id: playerID!, url: url)
+            }catch{
+                print("Error when deleting: \(error)")
+            }
+        }
+    }
+    
 }
 
 

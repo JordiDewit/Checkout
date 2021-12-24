@@ -119,6 +119,35 @@ struct CheckoutView: View {
         .cornerRadius(40)
     }
     
+    var deletePlayer: some View {
+        Button(
+           action: {
+               withAnimation{
+                   AudioServicesPlaySystemSound(1100)
+                   gameIsOver = false
+                   goToStartingView.toggle()
+                   Task{
+                       do{
+                           try await viewModel.deleteCurrentPlayer()
+                       }catch{
+                           print("Error when deleting: \(error)")
+                       }
+                   }
+               }
+        },
+           label: {
+               Text("Verwijder speler")
+                   .font(Font.system(size: 26, weight: .heavy, design: .rounded))
+           }).fullScreenCover(isPresented: $goToStartingView, content: {
+               //fresh start initial entry
+               StartView(startViewModel: StartViewModel(), nextViewModel: CheckoutViewModel())
+        })
+        .padding()
+        .foregroundColor(.black)
+        .background(LinearGradient(gradient: Gradient(colors: [Color.purple, Color.yellow]), startPoint: .top, endPoint: .bottom))
+        .cornerRadius(40)
+    }
+    
     // money grid
     var moneyView: some View {
         
@@ -173,7 +202,7 @@ struct CheckoutView: View {
                     .transition(.opacity)
             Spacer()
             // here comes a list of previous scores
-            Text("\(viewModel.player!.name), jouw vorige scores..")
+            Text("\(viewModel.player!.name),  jouw vorige scores..")
                 .font(.system(size: Constants.fontSize2, weight: .heavy, design: .rounded))
                     .transition(.opacity)
     
@@ -185,8 +214,11 @@ struct CheckoutView: View {
                             .transition(.opacity)
                 }
 
-            stopGame
-        
+            HStack{
+                stopGame
+                Spacer()
+                deletePlayer
+            }
         }
         .padding()
         .background(
