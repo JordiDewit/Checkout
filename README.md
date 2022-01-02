@@ -11,3 +11,7 @@ Checkout is a learning game for children. The user can choose between levels of 
 - SwiftUI
 - Vapor
 - Postgres
+
+## Guide
+- Testing from API calls is done with Postman
+- creating public connection URL = ./ngrok http port
