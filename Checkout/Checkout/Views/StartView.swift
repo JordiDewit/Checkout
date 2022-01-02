@@ -14,8 +14,9 @@ struct StartView: View {
     @State var playBtnDisabled = true
     @State var goToNextView: Bool = false
     @State var btnOpacity: CGFloat = 0.5
-    
+   
     var body: some View {
+     
             VStack{
                 Image("checkout")
                     .cornerRadius(30)
@@ -87,12 +88,14 @@ struct StartView: View {
             }
             .padding()
             .background(
-                Image("home")
-                    .resizable()
-                    .edgesIgnoringSafeArea(.all)
-                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                    .opacity(0.5)
-                )
+                GeometryReader{ geo in
+                    Image("home")
+                        .resizable()
+                        .edgesIgnoringSafeArea(.all)
+                        .frame(width: geo.size.width * 1, height: geo.size.height * 1)
+                        .opacity(0.5)
+                }
+            )
             .onAppear(perform: {
                 playSound(sound: "backgroundm", type: "mp3")
                 Task{
@@ -116,6 +119,7 @@ struct StartView: View {
         }
         goToNextView.toggle()
     }
+
 }
 
 

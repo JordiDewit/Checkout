@@ -59,12 +59,14 @@ struct CheckoutView: View {
         }
         .padding()
         .background(
-            Image("store")
-                .resizable()
-                .edgesIgnoringSafeArea(.all)
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                .opacity(0.5)
-            )
+            GeometryReader{ geo in
+                Image("store")
+                    .resizable()
+                    .edgesIgnoringSafeArea(.all)
+                    .frame(width: geo.size.width * 1, height: geo.size.height * 1)
+                    .opacity(0.5)
+            }
+        )
     }
     // the cash register which receives the money
     var cashRegister: some View {
@@ -222,12 +224,14 @@ struct CheckoutView: View {
         }
         .padding()
         .background(
-            Image("home")
-                .resizable()
-                .edgesIgnoringSafeArea(.all)
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                .opacity(0.5)
-            )
+            GeometryReader{ geo in
+                Image("home")
+                    .resizable()
+                    .edgesIgnoringSafeArea(.all)
+                    .frame(width: geo.size.width * 1, height: geo.size.height * 1)
+                    .opacity(0.5)
+            }
+        )
         }
     }
     

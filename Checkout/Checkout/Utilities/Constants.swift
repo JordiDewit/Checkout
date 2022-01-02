@@ -17,7 +17,7 @@ struct Constants{
 
 enum APIConstants{
     // public url from ngrok file
-    static let basicURL = "https://0239-81-245-62-144.ngrok.io/"
+    static let basicURL = "https://dd85-2a02-a03f-60e7-7900-e067-236c-9654-af00.ngrok.io/"
 }
 
 enum Endpoints {
